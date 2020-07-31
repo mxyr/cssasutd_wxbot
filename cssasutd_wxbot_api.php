@@ -71,8 +71,20 @@ if ( $pass ) {
 					$to_wxid_list = find_target( $cssasutd_wxbot->from_wxid, $cssasutd_wxbot->config[ 'group_main' ] );
 					switch ( $cssasutd_wxbot->msg_type ) { //匹配已知消息类型
 						case 1: //普通文字，直接转发
-							foreach ( $to_wxid_list as $group_name => $to_wxid ) {
-								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . "：\n" . $cssasutd_wxbot->msg, $cssasutd_wxbot->robot_wxid, $to_wxid );
+							$at_pattern = '/\[\@at,nickname=(.*?),/';
+							$msg_pattern_qian = '/^(.*?)\[/';
+							$msg_pattern_hou = '/\](.*?)$/';
+							preg_match( $at_pattern, $cssasutd_wxbot->msg, $at_match );
+							if ( $at_match == [] ) {
+								foreach ( $to_wxid_list as $group_name => $to_wxid ) {
+									$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . "：\n" . $cssasutd_wxbot->msg, $cssasutd_wxbot->robot_wxid, $to_wxid );
+								}
+							} else {
+								preg_match( $msg_pattern_qian, $cssasutd_wxbot->msg, $msg_match_qian );
+								preg_match( $msg_pattern_hou, $cssasutd_wxbot->msg, $msg_match_hou );
+								foreach ( $to_wxid_list as $group_name => $to_wxid ) {
+									$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . "：\n" . '@' . $at_match[ 1 ] . ' ' . $msg_match_qian[ 1 ] . $msg_match_hou[ 1 ], $cssasutd_wxbot->robot_wxid, $to_wxid );
+								}
 							}
 							break;
 						case 3: //图片，直接转发
