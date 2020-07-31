@@ -10,8 +10,8 @@ github：https://github.com/www-keaimao-com/sdk_http_php
 
 支持的指令：  
 短指令：  
-群列表		返回所有群聊的名称与id  
-通信测试		发起一次请求，测试通信是否正常  
+群列表&nbsp返回所有群聊的名称与id  
+通信测试&nbsp发起一次请求，测试通信是否正常  
 json格式指令：  
 格式：{"指令":"","参数":""}  
 支持的指令：   
