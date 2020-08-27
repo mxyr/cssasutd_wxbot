@@ -171,7 +171,7 @@ if ( $pass ) {
 			//}
 			switch ( true ) {
 				case in_array( $cssasutd_wxbot->from_wxid, $cssasutd_wxbot->config[ 'group_main' ] ): //如果来自大群
-					$group_wxid_list = find_target( $$cssasutd_wxbot->from_wxid, $cssasutd_wxbot->config[ 'group_main' ] ); //通过检测消息来源确定转发目标
+					$group_wxid_list = find_target( $cssasutd_wxbot->from_wxid, $cssasutd_wxbot->config[ 'group_main' ] ); //通过检测消息来源确定转发目标
 					$origin = json_decode( $cssasutd_wxbot->msg, true );
 					//$msg = sprintf( "%s拉了新人入群，撒花欢迎：%s！！", $origin[ 'inviter' ][ 'nickname' ], $origin[ 'guest' ][ 0 ][ 'nickname' ] );
 					$welcome = sprintf( "欢迎%s加入SUTD中国学生学者之家，\n请阅读群公告并及时修改昵称，感谢配合！", $origin[ 'guest' ][ 0 ][ 'nickname' ] );
