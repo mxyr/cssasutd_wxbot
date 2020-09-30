@@ -33,6 +33,9 @@ if ( $pass ) {
 							$file_link = str_replace( ':8073', 'wxbot.mxyr.tech:8073', $file );
 							$cssasutd_wxbot->sendTextMsg( '这是一条语音消息，暂不支持转发。\n地址：\n' . $file_link );
 							break;
+						case 42: //名片消息
+							$cssasutd_wxbot->sendTextMsg( '这是一个名片，暂不支持转发。' );
+							break;
 						case 43: //视频消息
 							$file_local = urlencode( $cssasutd_wxbot->msg );
 							$cssasutd_wxbot->sendVideoMsg( $file_local, $cssasutd_wxbot->robot_wxid, $cssasutd_wxbot->from_wxid );
@@ -46,7 +49,8 @@ if ( $pass ) {
 							$pattern = $pattern = '/<url>(.*?)<\/\url>/';
 							preg_match( $pattern, $msg, $match );
 							$link = $match[ 1 ];
-							$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link, $cssasutd_wxbot->robot_wxid, $to_wxid );
+							$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link );
+							$cssasutd_wxbot->sendTextMsg( '完整消息:\n' . $cssasutd_wxbot->msg );
 							break;
 						case 2001: //红包消息
 							$cssasutd_wxbot->sendTextMsg( '这是一个红包，无法转发。' );
@@ -57,6 +61,7 @@ if ( $pass ) {
 							break;
 						default: //如果不能匹配任何已知消息类型，报告错误
 							$cssasutd_wxbot->sendTextMsg( '未定义的消息类型：msg_type=' . $cssasutd_wxbot->msg_type );
+							$cssasutd_wxbot->sendTextMsg( '完整消息:\n' . 'type=' . $cssasutd_wxbot->type . '\nmsg_type=' . $cssasutd_wxbot->msg_type . '\nfrom_name=' . $cssasutd_wxbot->from_name . '\nfrom_wxid=' . $cssasutd_wxbot->from_wxid . '\nfinal_from_name=' . $cssasutd_wxbot->final_from_name . '\nfinal_from_wxid=' . $cssasutd_wxbot->final_from_wxid . '\nmsg=' . $cssasutd_wxbot->msg . '\nfile_url=' . $cssasutd_wxbot->file_url . '\n结束。' );
 							break;
 					}
 					break;
@@ -102,6 +107,11 @@ if ( $pass ) {
 								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条语音消息，暂不支持转发。\n地址：\n' . $file_link, $cssasutd_wxbot->robot_wxid, $to_wxid );
 							}
 							break;
+						case 42: //名片消息
+							foreach ( $to_wxid_list as $group_name => $to_wxid ) {
+								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一个名片，暂时无法转发。', $cssasutd_wxbot->robot_wxid, $to_wxid );
+							}
+							break;
 						case 43: //视频消息，直接转发
 							foreach ( $to_wxid_list as $group_name => $to_wxid ) {
 								$file_local = urlencode( $cssasutd_wxbot->msg );
@@ -140,6 +150,8 @@ if ( $pass ) {
 							break;
 						case 10000: //系统消息，如果未定义则通知管理员
 							notify_error( $cssasutd_wxbot, '未定义的系统消息，详情如下：\n' );
+							break;
+						case 10002: //群管理消息，机器人不做出任何反应
 							break;
 						default: //如果不能匹配任何已知消息类型，报告错误
 							foreach ( $to_wxid_list as $group_name => $to_wxid ) {
