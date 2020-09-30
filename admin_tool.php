@@ -94,6 +94,33 @@ function command( $bot ) { //管理员命令解析器
 					$bot->sendTextMsg( '参数格式不合法！' );
 				}
 				break;
+			case '群发链接':
+				//首先验证命令合法性
+				$gp_list = $bot->getGroupList( $bot->robot_wxid, 1 );
+				$gp_list_array = json_decode( $gp_list );
+				$gp_array = [];
+				foreach ( $gp_list_array as $k => $gp_info ) {
+					$gp_array[] = $gp_info->wxid;
+				}
+				if ( $deco_msg->参数 != null and is_string( $deco_msg->参数->标题 )and is_string( $deco_msg->参数->描述 )and is_string( $deco_msg->参数->链接 )and is_string( $deco_msg->参数->缩略图链接 ) ) {
+					$title = $deco_msg->参数->标题;
+					$text = $deco_msg->参数->描述;
+					$target_url = $deco_msg->参数->链接;
+					$pic_url = $deco_msg->参数->缩略图链接;
+					foreach ( $bot->config[ 'group_main' ] as $name => $qun_id ) {
+						sleep( 1 );
+						if ( in_array( $qun_id, $gp_array ) ) {
+							$bot->sendLinkMsg( $title, $text, $target_url, $pic_url, $bot->robot_wxid, $qun_id );
+						} else {
+							$bot->sendTextMsg( $qun_id . '不在群聊列表，群发消息失败！' );
+						}
+					}
+					sleep( 1 );
+					$bot->sendTextMsg( '群发消息成功！' );
+				} else {
+					$bot->sendTextMsg( '参数格式不合法！' );
+				}
+				break;
 			default:
 				$bot->sendTextMsg( '无法识别命令！' );
 				break;

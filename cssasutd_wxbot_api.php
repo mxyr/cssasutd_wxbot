@@ -129,7 +129,7 @@ if ( $pass ) {
 						case 49: //链接消息，无法转发，提供地址供查询
 							foreach ( $to_wxid_list as $group_name => $to_wxid ) {
 								$msg = $cssasutd_wxbot->msg;
-								$pattern = $pattern = '/<url>(.*?)<\/\url>/';
+								$pattern = '/<url>(.*?)<\/\url>/';
 								preg_match( $pattern, $msg, $match );
 								$link = $match[ 1 ];
 								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link, $cssasutd_wxbot->robot_wxid, $to_wxid );
