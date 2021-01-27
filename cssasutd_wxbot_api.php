@@ -45,12 +45,16 @@ if ( $pass ) {
 							$cssasutd_wxbot->sendTextMsg( '这是一条动态表情消息，暂不支持转发。\n地址：\n' . $file );
 							break;
 						case 49: //链接消息，无法转发，提供地址供查询
-							$msg = $cssasutd_wxbot->msg;
-							$pattern = $pattern = '/<url>(.*?)<\/\url>/';
-							preg_match( $pattern, $msg, $match );
-							$link = $match[ 1 ];
-							$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link );
-							$cssasutd_wxbot->sendTextMsg( '完整消息:\n' . $cssasutd_wxbot->msg );
+							if ( strpos( $cssasutd_wxbot->msg, '<type>57</type>' ) ) { //微信改版，现在回复消息会被识别为链接消息
+								$send_msg = find_msg( $cssasutd_wxbot->msg ); //发送的消息
+								$name = find_name( $cssasutd_wxbot->msg ); //回复的对象
+								$content = find_content( $cssasutd_wxbot->msg ); //回复的消息
+								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . "：\n" . $send_msg . "\n--------\n" . $name . "：\n" . $content );
+							} else {
+								$link = find_url( $cssasutd_wxbot->msg );
+								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link );
+								$cssasutd_wxbot->sendTextMsg( '完整消息:\n' . $cssasutd_wxbot->msg );
+							}
 							break;
 						case 2001: //红包消息
 							$cssasutd_wxbot->sendTextMsg( '这是一个红包，无法转发。' );
@@ -128,11 +132,15 @@ if ( $pass ) {
 							break;
 						case 49: //链接消息，无法转发，提供地址供查询
 							foreach ( $to_wxid_list as $group_name => $to_wxid ) {
-								$msg = $cssasutd_wxbot->msg;
-								$pattern = '/<url>(.*?)<\/\url>/';
-								preg_match( $pattern, $msg, $match );
-								$link = $match[ 1 ];
-								$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link, $cssasutd_wxbot->robot_wxid, $to_wxid );
+								if ( strpos( $cssasutd_wxbot->msg, '<type>57</type>' ) ) { //微信改版，现在回复消息会被识别为链接消息
+									$send_msg = find_msg( $cssasutd_wxbot->msg ); //发送的消息
+									$name = find_name( $cssasutd_wxbot->msg ); //回复的对象
+									$content = find_content( $cssasutd_wxbot->msg ); //回复的消息
+									$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . "：\n" . $send_msg . "\n--------\n" . $name . "：\n" . $content, $cssasutd_wxbot->robot_wxid, $to_wxid );
+								} else {
+									$link = find_url( $cssasutd_wxbot->msg );
+									$cssasutd_wxbot->sendTextMsg( $cssasutd_wxbot->final_from_name . '发送了一条链接卡片，暂不支持转发卡片。\n链接地址：\n' . $link, $cssasutd_wxbot->robot_wxid, $to_wxid );
+								}
 							}
 							break;
 						case 2001: //红包消息
