@@ -1,7 +1,8 @@
 # 基于**可爱猫**的微信机器人api
 
 本php程序基于**可爱猫框架**：  
-官网：http://www.keaimao.com  （官网可能挂了，说明以及文件镜像看这里：https://www.mxyr.tech/it/windows下搭建微信机器人/）
+官网：http://www.keaimao.com  官网可能挂了，说明以及文件镜像看这里：https://www.mxyr.tech/it/windows下搭建微信机器人/
+
 github：https://github.com/www-keaimao-com/sdk_http_php
 
 ## 目前程序功能：  
